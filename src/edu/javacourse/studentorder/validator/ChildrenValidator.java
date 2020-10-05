@@ -5,8 +5,7 @@ import edu.javacourse.studentorder.domain.StudentOrder;
 
 public class ChildrenValidator {
     public AnswerChildren checkChildren(StudentOrder so) {
-        AnswerChildren ans = new AnswerChildren();
-        ans.success = true;
-        return ans;
+        System.out.println("Children check is running");
+        return new AnswerChildren();
     }
 }

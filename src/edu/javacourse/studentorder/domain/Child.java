@@ -1,11 +1,16 @@
 package edu.javacourse.studentorder.domain;
 
 import java.time.LocalDate;
+import java.util.Date;
 
 public class Child extends Person {
     private String certificateNumber;
     private LocalDate issueDate;
     private String issueDepartment;
+
+    public Child(String surName, String givenName, String patronymic, Date dateOfBirth, Address address) {
+        super(surName, givenName, patronymic, dateOfBirth, address);
+    }
 
     public String getCertificateNumber() {
         return certificateNumber;

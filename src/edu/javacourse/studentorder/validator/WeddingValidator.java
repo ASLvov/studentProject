@@ -5,8 +5,7 @@ import edu.javacourse.studentorder.domain.StudentOrder;
 
 public class WeddingValidator {
     public AnswerWedding checkWedding(StudentOrder so) {
-        AnswerWedding ans = new AnswerWedding();
-        ans.success = true;
-        return ans;
+        System.out.println("Wedding check is running");
+        return new AnswerWedding();
     }
 }
