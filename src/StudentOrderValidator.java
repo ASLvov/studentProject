@@ -1,9 +1,13 @@
 import edu.javacourse.studentorder.domain.*;
+import edu.javacourse.studentorder.exception.CityRegisterException;
 import edu.javacourse.studentorder.mail.MailSender;
 import edu.javacourse.studentorder.validator.ChildrenValidator;
 import edu.javacourse.studentorder.validator.CityRegisterValidator;
 import edu.javacourse.studentorder.validator.StudentValidator;
 import edu.javacourse.studentorder.validator.WeddingValidator;
+
+import java.util.LinkedList;
+import java.util.List;
 
 public class StudentOrderValidator {
     private CityRegisterValidator cityRegisterVal;
@@ -20,43 +24,43 @@ public class StudentOrderValidator {
         mailSender = new MailSender();
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws CityRegisterException {
         StudentOrderValidator studentOrderValidator = new StudentOrderValidator();
         studentOrderValidator.checkAll();
     }
 
-    public void checkAll() {
-        StudentOrder[] soArray = readStudentOrders();
-        /*for (int i=0; i<soArray.length; i++) {
-            System.out.println("Заявка № " + soArray[i].getStudentOrderId());
-            checkOneOrder(soArray[i]);
+    public void checkAll() throws CityRegisterException {
+        List<StudentOrder> soList = readStudentOrders();
+        /*for (int i=0; i<soList.length; i++) {
+            System.out.println("Заявка № " + soList[i].getStudentOrderId());
+            checkOneOrder(soList[i]);
             System.out.println();
         }*/
-        for (StudentOrder so : soArray) {
+        for (StudentOrder so : soList) {
             System.out.println("Заявка № " + so.getStudentOrderId());
             checkOneOrder(so);
             System.out.println();
         }
     }
 
-    public void checkOneOrder(StudentOrder so){
+    public void checkOneOrder(StudentOrder so) throws CityRegisterException {
         AnswerCityRegister cityRegisterAns = checkCityRegister(so);
         AnswerWedding weddingAns = checkWedding(so);
         AnswerChildren childrenAns = checkChildren(so);
         AnswerStudent studentAns = checkStudent(so);
         sendMail(so);
     }
-    public StudentOrder[] readStudentOrders() {
-        StudentOrder[] studentOrdersArray = new StudentOrder[3];
-        int id;
-        for (int i=0; i<studentOrdersArray.length; i++) {
-            id=i+1;
-            studentOrdersArray[i] = SaveStudentOrder.buildStudentOrder(id);
+    public List<StudentOrder> readStudentOrders() {
+        List<StudentOrder> soList = new LinkedList<>();
+
+        for (int i=0; i<soList.size(); i++) {
+            StudentOrder so = SaveStudentOrder.buildStudentOrder(i);
+            soList.add(so);
         }
-        return studentOrdersArray;
+        return soList;
     }
 
-    public AnswerCityRegister checkCityRegister(StudentOrder studentOrder) {
+    public AnswerCityRegister checkCityRegister(StudentOrder studentOrder) throws CityRegisterException {
         return cityRegisterVal.checkCityRegister(studentOrder);
     }
 

@@ -1,7 +1,6 @@
 package edu.javacourse.studentorder.domain;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 public class Adult extends Person {
     private String passportSerial;
@@ -11,7 +10,7 @@ public class Adult extends Person {
     private String university;
     private String studentID;
 
-    public Adult(String surName, String givenName, String patronymic, Date dateOfBirth, Address address) {
+    public Adult(String surName, String givenName, String patronymic, LocalDate dateOfBirth, Address address) {
         super(surName, givenName, patronymic, dateOfBirth, address);
     }
 
