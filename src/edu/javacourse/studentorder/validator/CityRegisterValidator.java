@@ -1,19 +1,20 @@
 package edu.javacourse.studentorder.validator;
 
-import edu.javacourse.studentorder.domain.AnswerCityRegister;
+import edu.javacourse.studentorder.domain.Person;
+import edu.javacourse.studentorder.domain.register.AnswerCityRegister;
 import edu.javacourse.studentorder.domain.Child;
-import edu.javacourse.studentorder.domain.CityRegisterCheckerResponse;
+import edu.javacourse.studentorder.domain.register.AnswerCityRegisterItem;
+import edu.javacourse.studentorder.domain.register.CityRegisterResponse;
 import edu.javacourse.studentorder.domain.StudentOrder;
 import edu.javacourse.studentorder.exception.CityRegisterException;
+import edu.javacourse.studentorder.exception.TransportException;
+import edu.javacourse.studentorder.validator.register.CityRegisterChecker;
+import edu.javacourse.studentorder.validator.register.FakeCityRegisterChecker;
 
-import java.util.Iterator;
 import java.util.List;
 
 public class CityRegisterValidator {
-    public String hostName;
-    public int port;
-    public String login;
-    public String password;
+    private static final String IN_CODE = "NO_GRN";
 
     private CityRegisterChecker personChecker;
 
@@ -22,27 +23,36 @@ public class CityRegisterValidator {
     }
 
     public AnswerCityRegister checkCityRegister(StudentOrder so) throws CityRegisterException {
-        try {
-            CityRegisterCheckerResponse hAns = personChecker.checkPerson(so.getHusband());
-            CityRegisterCheckerResponse wAns = personChecker.checkPerson(so.getWife());
-            List<Child> children = so.getChildren();
-            for (int i = 0; i < so.getChildren().size(); i++) {
-                CityRegisterCheckerResponse cAns = personChecker.checkPerson(children.get(i));
-            }
-
-            for (Iterator<Child> it = children.iterator(); it.hasNext(); ) {
-                Child child = it.next();
-                CityRegisterCheckerResponse cAns = personChecker.checkPerson(child);
-            }
-
-            for (Child child : children) {
-                CityRegisterCheckerResponse cAns = personChecker.checkPerson(child);
-            }
-        } catch (CityRegisterException e) {
-            e.printStackTrace(System.out);
-        }
-
         AnswerCityRegister ans = new AnswerCityRegister();
+        ans.addItem(checkPerson(so.getHusband()));
+        ans.addItem(checkPerson(so.getWife()));
+
+        for (Child child : so.getChildren())
+            ans.addItem(checkPerson(child));
+        return ans;
+    }
+
+    private AnswerCityRegisterItem checkPerson(Person person) {
+        AnswerCityRegisterItem.CityStatus status = null;
+        AnswerCityRegisterItem.CityError error = null;
+        try {
+            CityRegisterResponse tmp = personChecker.checkPerson(person);
+            status = tmp.isExisting() ?
+                    AnswerCityRegisterItem.CityStatus.YES :
+                    AnswerCityRegisterItem.CityStatus.NO;
+        } catch (CityRegisterException | TransportException ex) {
+            ex.printStackTrace(System.out);
+            status = AnswerCityRegisterItem.CityStatus.ERROR;
+            if (ex instanceof CityRegisterException) {
+                CityRegisterException e = (CityRegisterException) ex;
+                error = new AnswerCityRegisterItem.CityError(e.getCode(), ex.getMessage());
+            }
+            if (ex instanceof TransportException) {
+                TransportException e = (TransportException) ex;
+                error = new AnswerCityRegisterItem.CityError(IN_CODE, ex.getMessage());
+            }
+        }
+        AnswerCityRegisterItem ans = new AnswerCityRegisterItem(person, status, error);
         return ans;
     }
 }
