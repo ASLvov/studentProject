@@ -11,7 +11,7 @@ import java.util.List;
 
 public class SaveStudentOrder {
     public static void main(String[] args) throws Exception {
-        List<Street> d = new DictionaryDaoImpl().findStreets("d");
+        List<Street> d = new DictionaryDaoImpl().findStreets("ул");
         for (Street s : d) {
             System.out.println(s.getStreetName());
         }
