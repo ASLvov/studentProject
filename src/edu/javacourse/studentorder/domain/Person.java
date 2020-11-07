@@ -17,6 +17,10 @@ public abstract class Person {
         this.address = address;
     }
 
+    public Person() {
+
+    }
+
     public Address getAddress() {
         return address;
     }

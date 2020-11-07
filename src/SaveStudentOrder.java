@@ -1,14 +1,8 @@
-import edu.javacourse.studentorder.dao.DictionaryDaoImpl;
 import edu.javacourse.studentorder.dao.StudentOrderDao;
 import edu.javacourse.studentorder.dao.StudentOrderDaoImpl;
 import edu.javacourse.studentorder.domain.*;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.Statement;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 
 public class SaveStudentOrder {
@@ -51,11 +45,16 @@ public class SaveStudentOrder {
         StudentOrderDao dao = new StudentOrderDaoImpl();
         Long id = dao.saveStudentOrder(s);
         System.out.println(id);
+
+        List<StudentOrder> soList = dao.getStudentOrders();
+        for (StudentOrder so : soList) {
+            System.out.println(so.getStudentOrderId());
+        }
     }
 
-    static void saveStudentOrder(StudentOrder studentOrder) {
-        System.out.println("Order from " + studentOrder.getHusband().getSurName() + "'s family saved!");
-    }
+//    static void saveStudentOrder(StudentOrder studentOrder) {
+//        System.out.println("Order from " + studentOrder.getHusband().getSurName() + "'s family saved!");
+//    }
 
     static StudentOrder buildStudentOrder(long id) {
         StudentOrder so = new StudentOrder();
@@ -77,8 +76,8 @@ public class SaveStudentOrder {
         PassportOffice po1 = new PassportOffice(1L, "", "");
         husband.setIssueDepartment(po1);
         husband.setIssueDate(LocalDate.of(2018, 1, 10));
-        husband.setStudentID("" + (100000 + id));
-        husband.setUniversity("ОГУ");
+        husband.setStudentId("HH" + (100000 + id));
+        husband.setUniversity(new University(2L, ""));
         //жена
         Adult wife = new Adult("Иванова", "Василиса", "Ивановна",
                 LocalDate.of(2000, 6, 20), address);
@@ -87,8 +86,8 @@ public class SaveStudentOrder {
         PassportOffice po2 = new PassportOffice(2L, "", "");
         wife.setIssueDepartment(po2);
         wife.setIssueDate(LocalDate.of(2018, 6, 25));
-        wife.setStudentID("" + (200000 + id));
-        wife.setUniversity("ОГУ");
+        wife.setStudentId("WW" + (200000 + id));
+        wife.setUniversity(new University(1L, ""));
         //ребенок1
         Child child1 = new Child("Иванов", "Савелий", "Иванович",
                 LocalDate.of(2020, 12, 11), address);
