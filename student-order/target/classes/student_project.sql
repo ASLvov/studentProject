@@ -110,4 +110,4 @@ CREATE TABLE jc_student_child (
 );
 
 CREATE INDEX idx_student_order_status ON jc_student_order(student_order_status);
-CREATE INDEX idx_student_order_id ON jc_student_child(student_order_id);
+CREATE INDEX idx_student_order_id ON jc_student_child(student_order_id)

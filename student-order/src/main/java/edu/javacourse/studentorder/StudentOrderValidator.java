@@ -1,16 +1,19 @@
-import edu.javacourse.studentorder.domain.*;
+package edu.javacourse.studentorder;
+
+import edu.javacourse.studentorder.dao.StudentOrderDaoImpl;
+import edu.javacourse.studentorder.domain.StudentOrder;
 import edu.javacourse.studentorder.domain.children.AnswerChildren;
 import edu.javacourse.studentorder.domain.register.AnswerCityRegister;
 import edu.javacourse.studentorder.domain.student.AnswerStudent;
 import edu.javacourse.studentorder.domain.wedding.AnswerWedding;
 import edu.javacourse.studentorder.exception.CityRegisterException;
+import edu.javacourse.studentorder.exception.DaoException;
 import edu.javacourse.studentorder.mail.MailSender;
 import edu.javacourse.studentorder.validator.ChildrenValidator;
 import edu.javacourse.studentorder.validator.CityRegisterValidator;
 import edu.javacourse.studentorder.validator.StudentValidator;
 import edu.javacourse.studentorder.validator.WeddingValidator;
 
-import java.util.LinkedList;
 import java.util.List;
 
 public class StudentOrderValidator {
@@ -34,17 +37,15 @@ public class StudentOrderValidator {
     }
 
     public void checkAll() throws CityRegisterException {
-        List<StudentOrder> soList = readStudentOrders();
-        /*for (int i=0; i<soList.length; i++) {
-            System.out.println("Заявка № " + soList[i].getStudentOrderId());
-            checkOneOrder(soList[i]);
-            System.out.println();
-        }*/
-        for (StudentOrder so : soList) {
-            System.out.println("Заявка № " + so.getStudentOrderId());
-            checkOneOrder(so);
-            System.out.println();
+        try {
+            List<StudentOrder> soList = readStudentOrders();
+            for (StudentOrder so : soList) {
+                checkOneOrder(so);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
+
     }
 
     public void checkOneOrder(StudentOrder so) throws CityRegisterException {
@@ -54,14 +55,8 @@ public class StudentOrderValidator {
         AnswerStudent studentAns = checkStudent(so);
         sendMail(so);
     }
-    public List<StudentOrder> readStudentOrders() {
-        List<StudentOrder> soList = new LinkedList<>();
-
-        for (int i=0; i<soList.size(); i++) {
-            StudentOrder so = SaveStudentOrder.buildStudentOrder(i);
-            soList.add(so);
-        }
-        return soList;
+    public List<StudentOrder> readStudentOrders() throws DaoException {
+        return new StudentOrderDaoImpl().getStudentOrders();
     }
 
     public AnswerCityRegister checkCityRegister(StudentOrder studentOrder) throws CityRegisterException {
