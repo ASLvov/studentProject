@@ -2,6 +2,7 @@ package edu.javacourse.studentorder.dao;
 
 import edu.javacourse.studentorder.domain.*;
 import edu.javacourse.studentorder.exception.DaoException;
+import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -18,6 +19,13 @@ public class StudentOrderDaoImplTest {
     @Test
     public void saveStudentOrder() throws DaoException {
         StudentOrder so = buildStudentOrder(10);
+        Long id = new StudentOrderDaoImpl().saveStudentOrder(so);
+    }
+
+    @Test (expected = DaoException.class)
+    public void saveStudentOrderError() throws DaoException {
+        StudentOrder so = buildStudentOrder(10);
+        so.getHusband().setSurName(null);
         Long id = new StudentOrderDaoImpl().saveStudentOrder(so);
     }
 
