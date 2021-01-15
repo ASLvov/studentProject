@@ -21,6 +21,13 @@ public abstract class Person {
 
     }
 
+    public Person(String surName, String givenName, String patronymic, LocalDate dateOfBirth) {
+        this.surName = surName;
+        this.givenName = givenName;
+        this.patronymic = patronymic;
+        this.dateOfBirth = dateOfBirth;
+    }
+
     public Address getAddress() {
         return address;
     }

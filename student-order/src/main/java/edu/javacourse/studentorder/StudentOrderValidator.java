@@ -50,11 +50,12 @@ public class StudentOrderValidator {
 
     public void checkOneOrder(StudentOrder so) throws CityRegisterException {
         AnswerCityRegister cityRegisterAns = checkCityRegister(so);
-        AnswerWedding weddingAns = checkWedding(so);
-        AnswerChildren childrenAns = checkChildren(so);
-        AnswerStudent studentAns = checkStudent(so);
-        sendMail(so);
+//        AnswerWedding weddingAns = checkWedding(so);
+//        AnswerChildren childrenAns = checkChildren(so);
+//        AnswerStudent studentAns = checkStudent(so);
+//        sendMail(so);
     }
+
     public List<StudentOrder> readStudentOrders() throws DaoException {
         return new StudentOrderDaoImpl().getStudentOrders();
     }
